@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+import com.aprendendo.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Entity;
@@ -29,15 +30,19 @@ public class Order implements Serializable {
 	@JoinColumn(name = "client_id")
 	private User client;
 	
+	private Integer orderstatus;
+
+	
 	public Order() {
 		
 	}
 
-	public Order(Long id, Instant moment, User client) {
+	public Order(Long id, Instant moment, User client, OrderStatus orderstatus) {
 		super();
 		this.id = id;
 		this.moment = moment;
 		this.client = client;
+		setOrderstatus(orderstatus);
 	}
 
 	public Long getId() {
@@ -63,6 +68,16 @@ public class Order implements Serializable {
 	public void setClient(User client) {
 		this.client = client;
 	}
+	
+	public OrderStatus getOrderstatus() {
+		return OrderStatus.valueOf(orderstatus);
+	}
+
+	public void setOrderstatus(OrderStatus orderstatus) {
+		if (orderstatus != null) {
+		this.orderstatus = orderstatus.getCode();
+		}
+	}
 
 	@Override
 	public int hashCode() {
@@ -80,6 +95,7 @@ public class Order implements Serializable {
 		Order other = (Order) obj;
 		return Objects.equals(id, other.id);
 	}
+
 	
 	
 	
