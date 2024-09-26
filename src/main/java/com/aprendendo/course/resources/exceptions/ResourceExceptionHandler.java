@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.aprendendo.course.services.exceptions.DatabaseException;
 import com.aprendendo.course.services.exceptions.ResourceNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,4 +30,12 @@ public class ResourceExceptionHandler implements Serializable {
 		return ResponseEntity.status(status).body(erro);
 		
 	}
+
+	@ExceptionHandler(DatabaseException.class)
+	public ResponseEntity <StandardError> databaseException (DatabaseException e, HttpServletRequest request){
+		String error = "Database error";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError erro = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(erro);
+		}
 }
